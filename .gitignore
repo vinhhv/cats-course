@@ -1,6 +1,6 @@
 
-# Created by https://www.toptal.com/developers/gitignore/api/scala,intellij,java,sbt
-# Edit at https://www.toptal.com/developers/gitignore?templates=scala,intellij,java,sbt
+# Created by https://www.toptal.com/developers/gitignore/api/scala,sbt,intellij,java
+# Edit at https://www.toptal.com/developers/gitignore?templates=scala,sbt,intellij,java
 
 ### Intellij ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
@@ -143,7 +143,8 @@ project/plugins/project/
 .history
 .cache
 .lib/
+.bsp
 
 ### Scala ###
 
-# End of https://www.toptal.com/developers/gitignore/api/scala,intellij,java,sbt
+# End of https://www.toptal.com/developers/gitignore/api/scala,sbt,intellij,java
