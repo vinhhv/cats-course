@@ -11,6 +11,5 @@ libraryDependencies ++= Seq(
 )
 
 scalacOptions ++= Seq(
-  "-language:higherKinds",
   "Ypartial-unification"
 )
