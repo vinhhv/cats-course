@@ -55,7 +55,6 @@ object Monads {
     def pure[A](value: A): M[A]
     def flatMap[A, B](ma: M[A])(f: A => M[B]): M[B]
 
-    // TODO implement this
     def map[A, B](ma: M[A])(f: A => B): M[B] = flatMap(ma)(f andThen pure)
   }
 
