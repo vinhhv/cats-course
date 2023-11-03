@@ -1,6 +1,6 @@
 package part4typeclasses
 
-import cats.{Applicative, Foldable, Monad}
+import cats.{Applicative, Foldable, Functor, Monad}
 
 import java.util.concurrent.{ExecutorService, Executors}
 import scala.concurrent.{ExecutionContext, Future}
