@@ -32,9 +32,10 @@ object WeakerApplicatives {
   val funcApp     = applyOption.ap(Some((x: Int) => x + 1))(Some(2)) // Some(3)
 
   import cats.syntax.apply.* // extension methods from Apply
-  val tupleOfOptions = (Option(1), Option(2), Option(3), Option.empty[Int])
-  val optionOfTuple  = tupleOfOptions.tupled              // Some((1, 2, 3))
-  val sumOption      = tupleOfOptions.mapN(_ + _ + _ + _) // Some(6)
+  val tupleOfOptions: (Option[Int], Option[Int], Option[Int], Option[Int]) =
+    (Option(1), Option(2), Option(3), Option.empty[Int])
+  val optionOfTuple: Option[(Int, Int, Int, Int)] = tupleOfOptions.tupled              // Some((1, 2, 3))
+  val sumOption: Option[Int]                      = tupleOfOptions.mapN(_ + _ + _ + _) // Some(6)
 
   def main(args: Array[String]): Unit = {
     println(optionOfTuple)
