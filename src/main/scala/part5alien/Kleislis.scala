@@ -30,8 +30,8 @@ object Kleislis {
   type InterestingKleisli[A, B] = Kleisli[Id, A, B] // wrapper over A => Id[B]
   // InterestingKleisli == Reader!
   // hint
-  val times2   = Reader[Id, Int, Int](x => x * 2)
-  val plus4    = Reader[Id, Int, Int](y => y + 4)
+  val times2   = Reader[Int, Int](x => x * 2)
+  val plus4    = Reader[Int, Int](y => y + 4)
   val composed = times2.flatMap(t2 => plus4.map(p4 => t2 + p4))
   val composedFor = for {
     t2 <- times2
