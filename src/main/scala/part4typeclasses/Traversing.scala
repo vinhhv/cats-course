@@ -1,6 +1,6 @@
 package part4typeclasses
 
-import cats.{Applicative, Monad}
+import cats.{Applicative, Foldable, Monad}
 
 import java.util.concurrent.{ExecutorService, Executors}
 import scala.concurrent.{ExecutionContext, Future}
@@ -60,9 +60,53 @@ object Traversing {
   val allPairs  = listSequence(List(Vector(1, 2), Vector(3, 4)))               // all the possible 2-tuples
   val allPairs2 = listSequence(List(Vector(1, 2), Vector(3, 4), Vector(5, 6))) // all the possible 3-tuples
 
+  def filterAsOption(list: List[Int])(predicate: Int => Boolean): Option[List[Int]] =
+    listTraverse[Option, Int, Int](list)(n => Some(n).filter(predicate))
+  // TODO 4 - what's the result of:
+  val filterPairs1 = filterAsOption(List(2, 4, 6))(_ % 2 == 0) // Some(List(2, 4, 6))
+  val filterPairs2 = filterAsOption(List(1, 2, 3))(_ % 2 == 0) // None
+
+  import cats.data.Validated
+  type ErrorsOr[T] = Validated[List[String], T]
+  def filterAsValidated(list: List[Int])(predicate: Int => Boolean): ErrorsOr[List[Int]] =
+    listTraverse[ErrorsOr, Int, Int](list) { n =>
+      if (predicate(n)) Validated.valid(n)
+      else Validated.invalid(List(s"predicate for $n failed"))
+    }
+
+  // TODO 5 - what's the result of:
+  val allTrueValidated = filterAsValidated(List(2, 4, 6))(_ % 2 == 0) // Valid(List(2, 4, 6))
+  val someFalseValidated = filterAsValidated(List(1, 2, 3))(
+    _ % 2 == 0
+  ) // Invalid(List("predicate for 1 is false", "predicate for 2 is false"))
+
+  trait MyTraverse[L[_]] extends Foldable[L] with Functor[L] {
+    def traverse[F[_]: Applicative, A, B](container: L[A])(func: A => F[B]): F[L[B]]
+    def sequence[F[_]: Applicative, A](container: L[F[A]]): F[L[A]] =
+      traverse(container)(identity)
+
+    // TOOD 6
+    // hint
+    import cats.Id
+    // type Identity[T] = T
+    def map[A, B](wa: L[A])(f: A => B): L[B] = traverse[Id, A, B](wa)(f)
+  }
+
+  import cats.Traverse
+  import cats.instances.future.* // Applicative[Future]
+  val allbandwidthsCats = Traverse[List].traverse(servers)(getBandwidth)
+
+  // extension methods
+  import cats.syntax.traverse.* // sequence + traverse methods
+  val allBandwidthsCats2 = servers.traverse(getBandwidth)
+
   def main(args: Array[String]): Unit = {
     println(allPairs)
     println(allPairs2)
+    println(filterPairs1)
+    println(filterPairs2)
+    println(allTrueValidated)
+    println(someFalseValidated)
     es.shutdown()
   }
 }
